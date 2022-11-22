@@ -12,4 +12,11 @@
     <img src="https://img.pizza/350/400" alt="pizza">
     <p>Descrizione: @Model.Description</p>
     <h4>Prezzo: @Model.Price €</h4>
+    <div class="d-flex flex-wrap">
+        <a class="btn btn-warning me-3" asp-area="" asp-controller="Pizza" asp-action="Update" asp-route-id="@Model.Id">Modifica</a>
+        <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">Elimina</button>
+        </form>
+    </div>
 </section>

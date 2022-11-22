@@ -50,5 +50,47 @@ namespace la_mia_pizzeria_static.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult Update(int id)
+        {
+            Pizza pizza = db.Pizze.Where(p => p.Id == id).FirstOrDefault();
+            if (pizza == null)
+                return View("NotFound", "La pizza cercata non è stata trovata");
+            return View(pizza);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(Pizza pizza)
+        {
+            if (!ModelState.IsValid)
+            {
+                if (ModelState["Price"].Errors.Count > 0)
+                {
+                    ModelState["Price"].Errors.Clear();
+                    ModelState["Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
+                }
+                return View(pizza);
+            }
+
+            db.Pizze.Update(pizza);
+            db.SaveChanges();
+
+            return RedirectToAction("Detail", new { id = pizza.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            Pizza pizza = db.Pizze.Where(p => p.Id == id).FirstOrDefault();
+
+            if (pizza == null)
+                return View("NotFound", "La pizza cercata non è stata trovata");
+
+            db.Pizze.Remove(pizza);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
