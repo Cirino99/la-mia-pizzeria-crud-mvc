@@ -18,5 +18,7 @@ namespace la_mia_pizzeria_static.Models
         [Required(ErrorMessage = "Il prezzo è obbligatorio")]
         [Range(1, 30, ErrorMessage = "Il prezzo deve essere compreso tra 1 e 30")]
         public double Price { get; set; }
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }
