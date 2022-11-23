@@ -41,11 +41,12 @@ namespace la_mia_pizzeria_static.Controllers
         {
             if (!ModelState.IsValid)
             {
-                if (ModelState["Price"].Errors.Count > 0)
+                if (ModelState["Pizza.Price"].Errors.Count > 0)
                 {
-                    ModelState["Price"].Errors.Clear();
-                    ModelState["Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
+                    ModelState["Pizza.Price"].Errors.Clear();
+                    ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
+                formPizza.Categories = db.Categories.ToList();
                 return View(formPizza);
             }
 
@@ -68,17 +69,19 @@ namespace la_mia_pizzeria_static.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id, FormPizza formPizza)
         {
+            formPizza.Pizza.Id = id;
+
             if (!ModelState.IsValid)
             {
-                if (ModelState["Price"].Errors.Count > 0)
+                if (ModelState["Pizza.Price"].Errors.Count > 0)
                 {
-                    ModelState["Price"].Errors.Clear();
-                    ModelState["Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
+                    ModelState["Pizza.Price"].Errors.Clear();
+                    ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
+                formPizza.Categories = db.Categories.ToList();
                 return View(formPizza);
             }
 
-            formPizza.Pizza.Id = id;
             db.Pizze.Update(formPizza.Pizza);
             db.SaveChanges();
 
