@@ -68,8 +68,9 @@ namespace la_mia_pizzeria_static.Controllers
 
             if (category == null)
                 return View("NotFound", "La categoria cercata non è stata trovata");
-
-            category.Pizze.Clear();
+            if(category.Pizze.Count > 0)
+                return View("NotFound", "La categoria desiderata non si può eliminare in quanto ha delle pizze assegnate");
+            //category.Pizze.Clear(); serve ad eliminare a cascata le pizze assegnate
             db.Categories.Remove(category);
             db.SaveChanges();
 
