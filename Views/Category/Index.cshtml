@@ -33,10 +33,12 @@
                         <td>
                             <div class="d-flex flex-wrap">
                                 <a class="btn btn-warning me-3" asp-area="" asp-controller="Category" asp-action="Update" asp-route-id="@category.Id">Modifica</a>
+                                @if(category.Pizze.Count == 0){
                                 <form asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" method="post">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-danger">Elimina</button>
                                 </form>
+                                }
                             </div>
                         </td>
                     </tr>
