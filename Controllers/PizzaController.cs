@@ -1,6 +1,7 @@
 ﻿using la_mia_pizzeria_static.Data;
 using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
 namespace la_mia_pizzeria_static.Controllers
@@ -20,7 +21,7 @@ namespace la_mia_pizzeria_static.Controllers
 
         public IActionResult Detail(int id)
         {
-            Pizza pizza = db.Pizze.Where(p => p.Id == id).FirstOrDefault();
+            Pizza pizza = db.Pizze.Include("Category").Where(p => p.Id == id).FirstOrDefault();
             if(pizza == null)
                 return View("NotFound","La pizza cercata non è stata trovata");
             return View(pizza);
@@ -28,12 +29,15 @@ namespace la_mia_pizzeria_static.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            FormPizza formPizza = new FormPizza();
+            formPizza.Pizza = new Pizza();
+            formPizza.Categories = db.Categories.ToList();
+            return View(formPizza);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Pizza pizza)
+        public IActionResult Create(FormPizza formPizza)
         {
             if (!ModelState.IsValid)
             {
@@ -42,25 +46,27 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Price"].Errors.Clear();
                     ModelState["Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
-                return View(pizza);
+                return View(formPizza);
             }
 
-            db.Pizze.Add(pizza);
+            db.Pizze.Add(formPizza.Pizza);
             db.SaveChanges();
 
             return RedirectToAction("Index");
         }
         public IActionResult Update(int id)
         {
-            Pizza pizza = db.Pizze.Where(p => p.Id == id).FirstOrDefault();
-            if (pizza == null)
+            FormPizza formPizza = new FormPizza();
+            formPizza.Pizza = db.Pizze.Where(p => p.Id == id).FirstOrDefault();
+            if (formPizza.Pizza == null)
                 return View("NotFound", "La pizza cercata non è stata trovata");
-            return View(pizza);
+            formPizza.Categories = db.Categories.ToList();
+            return View(formPizza);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(Pizza pizza)
+        public IActionResult Update(int id, FormPizza formPizza)
         {
             if (!ModelState.IsValid)
             {
@@ -69,13 +75,14 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Price"].Errors.Clear();
                     ModelState["Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
-                return View(pizza);
+                return View(formPizza);
             }
 
-            db.Pizze.Update(pizza);
+            formPizza.Pizza.Id = id;
+            db.Pizze.Update(formPizza.Pizza);
             db.SaveChanges();
 
-            return RedirectToAction("Detail", new { id = pizza.Id });
+            return RedirectToAction("Detail", new { id = formPizza.Pizza.Id });
         }
 
         [HttpPost]

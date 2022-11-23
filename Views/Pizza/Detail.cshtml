@@ -10,8 +10,9 @@
 <section class="ms-5">
     <h2>Pizza: @Model.Name</h2>
     <img src="https://img.pizza/350/400" alt="pizza">
+    <h5>Categoria: @Model.Category.Name</h5>
     <p>Descrizione: @Model.Description</p>
-    <h4>Prezzo: @Model.Price €</h4>
+    <h5>Prezzo: @Model.Price €</h5>
     <div class="d-flex flex-wrap">
         <a class="btn btn-warning me-3" asp-area="" asp-controller="Pizza" asp-action="Update" asp-route-id="@Model.Id">Modifica</a>
         <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@Model.Id" method="post">
