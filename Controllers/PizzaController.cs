@@ -28,6 +28,7 @@ namespace la_mia_pizzeria_static.Controllers
             return View(pizza);
         }
 
+        // versione select multiple ingredients
         //public IActionResult Create()
         //{
         //    FormPizza formPizza = new FormPizza();
@@ -48,10 +49,11 @@ namespace la_mia_pizzeria_static.Controllers
             formPizza.Pizza = new Pizza();
             formPizza.Categories = db.Categories.ToList();
             formPizza.AreChecked = new List<int>();
-            formPizza.IngredientsProva = db.Ingredients.ToList();
+            formPizza.Ingredients = db.Ingredients.ToList();
             return View(formPizza);
         }
 
+        // versione select multiple ingredients
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult Create(FormPizza formPizza)
@@ -99,7 +101,7 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
                 formPizza.Categories = db.Categories.ToList();
-                formPizza.IngredientsProva = db.Ingredients.ToList();
+                formPizza.Ingredients = db.Ingredients.ToList();
                 return View(formPizza);
             }
 
@@ -115,6 +117,8 @@ namespace la_mia_pizzeria_static.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // versione select multiple ingredients
         //public IActionResult Update(int id)
         //{
         //    FormPizza formPizza = new FormPizza();
@@ -139,8 +143,8 @@ namespace la_mia_pizzeria_static.Controllers
                 return View("NotFound", "La pizza cercata non è stata trovata");
             formPizza.Categories = db.Categories.ToList();
             formPizza.AreChecked = new List<int>();
-            formPizza.IngredientsProva = db.Ingredients.ToList();
-            foreach (Ingredient ingredient in formPizza.IngredientsProva)
+            formPizza.Ingredients = db.Ingredients.ToList();
+            foreach (Ingredient ingredient in formPizza.Ingredients)
             {
                 if(formPizza.Pizza.Ingredients.Any(i => i.Id == ingredient.Id))
                     formPizza.AreChecked.Add(ingredient.Id);
@@ -148,6 +152,7 @@ namespace la_mia_pizzeria_static.Controllers
             return View(formPizza);
         }
 
+        // versione select multiple ingredients
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult Update(int id, FormPizza formPizza)
@@ -203,7 +208,7 @@ namespace la_mia_pizzeria_static.Controllers
                 }
                 formPizza.Pizza.Id = id;
                 formPizza.Categories = db.Categories.ToList();
-                formPizza.IngredientsProva = db.Ingredients.ToList();
+                formPizza.Ingredients = db.Ingredients.ToList();
                 return View(formPizza);
             }
 

@@ -7,9 +7,10 @@ namespace la_mia_pizzeria_static.Data
     {
         public Pizza Pizza { get; set; }
         public List<Category>? Categories { get; set; }
-        public List<SelectListItem>? Ingredients { get; set; }
-        public List<int>? SelectedIngredients { get; set; }
-        public List<Ingredient>? IngredientsProva { get; set; }
+        // versione select multiple ingredients
+        //public List<SelectListItem>? Ingredients { get; set; }
+        //public List<int>? SelectedIngredients { get; set; }
+        public List<Ingredient>? Ingredients { get; set; }
         public List<int>? AreChecked { get; set; }
     }
 }

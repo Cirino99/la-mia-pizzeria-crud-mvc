@@ -30,6 +30,7 @@
                 }
             </select>
         </div>
+        @*versione select multiple ingredients*@
         @*<div class="mb-3">
             <strong>Ingredienti:</strong>
             <select asp-for="SelectedIngredients" asp-items="@Model.Ingredients" multiple="multiple" rows="10" class="d-block w-100">
@@ -39,7 +40,7 @@
         <div class="mb-3">
             <strong>Ingredienti:</strong>
             <br />
-            @foreach (Ingredient item in Model.IngredientsProva)
+            @foreach (Ingredient item in Model.Ingredients)
             {
                 @if (Model.AreChecked.Contains(item.Id))
                 {
