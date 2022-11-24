@@ -30,10 +30,21 @@
                 }
             </select>
         </div>
+        @*CheckBox funzionanti*@
         <div class="mb-3">
             <strong>Ingredienti:</strong>
-            <select asp-for="SelectedIngredients" asp-items="@Model.Ingredients" multiple="multiple" rows="10" class="d-block w-100">
-            </select>
+            <br />
+            @foreach (Ingredient item in Model.IngredientsProva)
+            {
+                @if (Model.AreChecked.Contains(item.Id)){
+                    <input name="AreChecked" type="checkbox" value="@item.Id" checked />
+                }
+                else {
+                    <input name="AreChecked" type="checkbox" value="@item.Id" />
+                }
+                <span>@item.Name</span>
+                <br />
+            }
         </div>
         <div class="mb-3">
             <strong>Prezzo:</strong>

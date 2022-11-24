@@ -33,13 +33,8 @@ namespace la_mia_pizzeria_static.Controllers
             FormPizza formPizza = new FormPizza();
             formPizza.Pizza = new Pizza();
             formPizza.Categories = db.Categories.ToList();
-            formPizza.Ingredients = new List<SelectListItem>();
-            List<Ingredient> ingredients = db.Ingredients.ToList();
-            foreach(Ingredient ingredient in ingredients)
-            {
-                SelectListItem item = new SelectListItem(ingredient.Name,ingredient.Id.ToString());
-                formPizza.Ingredients.Add(item);
-            }
+            formPizza.AreChecked = new List<int>();
+            formPizza.IngredientsProva = db.Ingredients.ToList();
             return View(formPizza);
         }
 
@@ -55,18 +50,12 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
                 formPizza.Categories = db.Categories.ToList();
-                formPizza.Ingredients = new List<SelectListItem>();
-                List<Ingredient> ingredients = db.Ingredients.ToList();
-                foreach (Ingredient ingredient in ingredients)
-                {
-                    SelectListItem item = new SelectListItem(ingredient.Name, ingredient.Id.ToString());
-                    formPizza.Ingredients.Add(item);
-                }
+                formPizza.IngredientsProva = db.Ingredients.ToList();
                 return View(formPizza);
             }
 
             formPizza.Pizza.Ingredients = new List<Ingredient>();
-            foreach (int ingredientId in formPizza.SelectedIngredients)
+            foreach (int ingredientId in formPizza.AreChecked)
             {
                 Ingredient ingredient = db.Ingredients.Where(i => i.Id == ingredientId).FirstOrDefault();
                 formPizza.Pizza.Ingredients.Add(ingredient);

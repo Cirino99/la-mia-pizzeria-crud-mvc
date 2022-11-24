@@ -9,5 +9,7 @@ namespace la_mia_pizzeria_static.Data
         public List<Category>? Categories { get; set; }
         public List<SelectListItem>? Ingredients { get; set; }
         public List<int>? SelectedIngredients { get; set; }
+        public List<Ingredient>? IngredientsProva { get; set; }
+        public List<int>? AreChecked { get; set; }
     }
 }
