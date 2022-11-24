@@ -11,6 +11,15 @@
     <h2>Pizza: @Model.Name</h2>
     <img src="https://img.pizza/350/400" alt="pizza">
     <h5>Categoria: @Model.Category.Name</h5>
+    <div class="d-flex flex-wrap">
+        <h5>Ingredienti: </h5>
+        <ul>
+            @foreach (Ingredient ingredient in Model.Ingredients)
+            {
+                <li class="badge btn-info">@ingredient.Name</li>
+            }
+        </ul>
+    </div>
     <p>Descrizione: @Model.Description</p>
     <h5>Prezzo: @Model.Price €</h5>
     <div class="d-flex flex-wrap">

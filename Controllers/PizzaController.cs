@@ -1,6 +1,7 @@
 ﻿using la_mia_pizzeria_static.Data;
 using la_mia_pizzeria_static.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
@@ -21,7 +22,7 @@ namespace la_mia_pizzeria_static.Controllers
 
         public IActionResult Detail(int id)
         {
-            Pizza pizza = db.Pizze.Include("Category").Where(p => p.Id == id).FirstOrDefault();
+            Pizza pizza = db.Pizze.Where(p => p.Id == id).Include("Category").Include("Ingredients").FirstOrDefault();
             if(pizza == null)
                 return View("NotFound","La pizza cercata non è stata trovata");
             return View(pizza);
@@ -32,6 +33,13 @@ namespace la_mia_pizzeria_static.Controllers
             FormPizza formPizza = new FormPizza();
             formPizza.Pizza = new Pizza();
             formPizza.Categories = db.Categories.ToList();
+            formPizza.Ingredients = new List<SelectListItem>();
+            List<Ingredient> ingredients = db.Ingredients.ToList();
+            foreach(Ingredient ingredient in ingredients)
+            {
+                SelectListItem item = new SelectListItem(ingredient.Name,ingredient.Id.ToString());
+                formPizza.Ingredients.Add(item);
+            }
             return View(formPizza);
         }
 
@@ -47,7 +55,21 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
                 formPizza.Categories = db.Categories.ToList();
+                formPizza.Ingredients = new List<SelectListItem>();
+                List<Ingredient> ingredients = db.Ingredients.ToList();
+                foreach (Ingredient ingredient in ingredients)
+                {
+                    SelectListItem item = new SelectListItem(ingredient.Name, ingredient.Id.ToString());
+                    formPizza.Ingredients.Add(item);
+                }
                 return View(formPizza);
+            }
+
+            formPizza.Pizza.Ingredients = new List<Ingredient>();
+            foreach (int ingredientId in formPizza.SelectedIngredients)
+            {
+                Ingredient ingredient = db.Ingredients.Where(i => i.Id == ingredientId).FirstOrDefault();
+                formPizza.Pizza.Ingredients.Add(ingredient);
             }
 
             db.Pizze.Add(formPizza.Pizza);
@@ -62,6 +84,13 @@ namespace la_mia_pizzeria_static.Controllers
             if (formPizza.Pizza == null)
                 return View("NotFound", "La pizza cercata non è stata trovata");
             formPizza.Categories = db.Categories.ToList();
+            formPizza.Ingredients = new List<SelectListItem>();
+            List<Ingredient> ingredients = db.Ingredients.ToList();
+            foreach (Ingredient ingredient in ingredients)
+            {
+                SelectListItem item = new SelectListItem(ingredient.Name, ingredient.Id.ToString());
+                formPizza.Ingredients.Add(item);
+            }
             return View(formPizza);
         }
 
