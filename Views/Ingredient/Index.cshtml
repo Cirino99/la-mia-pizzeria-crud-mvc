@@ -34,10 +34,10 @@
                         <td>@ingredient.Pizze.Count</td>
                         <td>
                             <div class="d-flex flex-wrap">
-                                <a class="btn btn-warning me-3" asp-area="" asp-controller="Category" asp-action="Update" asp-route-id="@ingredient.Id">Modifica</a>
+                                <a class="btn btn-warning me-3" asp-area="" asp-controller="Ingredient" asp-action="Update" asp-route-id="@ingredient.Id">Modifica</a>
                                 @if (ingredient.Pizze.Count == 0)
                                 {
-                                    <form asp-controller="Category" asp-action="Delete" asp-route-id="@ingredient.Id" method="post">
+                                    <form asp-controller="Ingredient" asp-action="Delete" asp-route-id="@ingredient.Id" method="post">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-danger">Elimina</button>
                                     </form>
