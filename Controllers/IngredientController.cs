@@ -47,14 +47,15 @@ namespace la_mia_pizzeria_static.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(Ingredient ingredient)
+        public IActionResult Update(int id, Ingredient formIngredient)
         {
             if (!ModelState.IsValid)
             {
-                return View(ingredient);
+                return View(formIngredient);
             }
 
-            ingredientRepository.Update(ingredient);
+            Ingredient ingredient = ingredientRepository.GetById(id);
+            ingredientRepository.Update(ingredient, formIngredient);
 
             return RedirectToAction("Index");
         }

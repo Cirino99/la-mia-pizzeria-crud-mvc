@@ -47,14 +47,15 @@ namespace la_mia_pizzeria_static.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(Category category)
+        public IActionResult Update(int id, Category formCategory)
         {
             if (!ModelState.IsValid)
             {
-                return View(category);
+                return View(formCategory);
             }
+            Category category = categoryRepository.GetById(id);
 
-            categoryRepository.Update(category);
+            categoryRepository.Update(category, formCategory);
 
             return RedirectToAction("Index");
         }

@@ -10,10 +10,10 @@ namespace la_mia_pizzeria_static.Controllers
 {
     public class PizzaController : Controller
     {
-        IDbPizzaRepository pizzaRepository;
+        IPizzaRepository pizzaRepository;
         DbCategoryRepository categoryRepository;
         DbIngredientRepository ingredientRepository;
-        public PizzaController(IDbPizzaRepository _pizzaRepository) : base()
+        public PizzaController(IPizzaRepository _pizzaRepository) : base()
         {
             pizzaRepository = _pizzaRepository;
             categoryRepository = new DbCategoryRepository();

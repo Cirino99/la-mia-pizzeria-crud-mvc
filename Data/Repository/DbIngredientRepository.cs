@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace la_mia_pizzeria_static.Data.Repository
 {
-    public class DbIngredientRepository : IDbIngredientRepository
+    public class DbIngredientRepository : IIngredientRepository
     {
         PizzeriaDbContext db;
         public DbIngredientRepository()
@@ -33,9 +33,10 @@ namespace la_mia_pizzeria_static.Data.Repository
             db.Ingredients.Add(ingredient);
             db.SaveChanges();
         }
-        public void Update(Ingredient ingredient)
+        public void Update(Ingredient ingredient, Ingredient formIngredient)
         {
-            db.Ingredients.Update(ingredient);
+            ingredient.Name = formIngredient.Name;
+            //db.Ingredients.Update(ingredient);
             db.SaveChanges();
         }
         public void Delete(Ingredient ingredient)

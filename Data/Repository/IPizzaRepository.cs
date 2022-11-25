@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace la_mia_pizzeria_static.Data.Repository
 {
-    public interface IDbPizzaRepository
+    public interface IPizzaRepository
     {
         List<Pizza> All();
         Pizza GetById(int id);

@@ -1,7 +1,7 @@
 ﻿@model Ingredient
 
 <div class="container">
-    <form asp-controller="Ingredient" asp-action="Update" method="post">
+    <form asp-controller="Ingredient" asp-action="Update" asp-route-id="@Model.Id" method="post">
         @Html.AntiForgeryToken()
         <div class="mb-3">
             <strong>Nome:</strong>

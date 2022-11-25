@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace la_mia_pizzeria_static.Data.Repository
 {
-    public class DbCategoryRepository : IDbCategoryRepository
+    public class DbCategoryRepository : ICategoryRepository
     {
         PizzeriaDbContext db;
         public DbCategoryRepository()
@@ -23,11 +23,12 @@ namespace la_mia_pizzeria_static.Data.Repository
             db.Categories.Add(category);
             db.SaveChanges();
         }
-        public void Update(Category category)
+        public void Update(Category category, Category formCategory)
         {
+            category.Name = formCategory.Name;
             //db.Categories.Update(category);
-            Category categoryOld = GetById(category.Id);
-            db.Entry(categoryOld).CurrentValues.SetValues(category);
+            //Category categoryOld = GetById(category.Id);
+            //db.Entry(categoryOld).CurrentValues.SetValues(category);
             db.SaveChanges();
         }
         public void Delete(Category category)
