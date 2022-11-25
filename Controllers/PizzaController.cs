@@ -108,15 +108,7 @@ namespace la_mia_pizzeria_static.Controllers
                 return View(formPizza);
             }
 
-            formPizza.Pizza.Ingredients = new List<Ingredient>();
-            foreach (int ingredientId in formPizza.AreChecked)
-            {
-                Ingredient ingredient = db.Ingredients.Where(i => i.Id == ingredientId).FirstOrDefault();
-                formPizza.Pizza.Ingredients.Add(ingredient);
-            }
-
-            db.Pizze.Add(formPizza.Pizza);
-            db.SaveChanges();
+            pizzaRepository.Create(formPizza.Pizza, formPizza.AreChecked);
 
             return RedirectToAction("Index");
         }
@@ -141,7 +133,7 @@ namespace la_mia_pizzeria_static.Controllers
         public IActionResult Update(int id)
         {
             FormPizza formPizza = new FormPizza();
-            formPizza.Pizza = db.Pizze.Where(p => p.Id == id).Include("Ingredients").FirstOrDefault();
+            formPizza.Pizza = pizzaRepository.GetById(id);
             if (formPizza.Pizza == null)
                 return View("NotFound", "La pizza cercata non è stata trovata");
             formPizza.Categories = db.Categories.ToList();
@@ -215,21 +207,8 @@ namespace la_mia_pizzeria_static.Controllers
                 return View(formPizza);
             }
 
-            Pizza pizza = db.Pizze.Where(p => p.Id == id).Include("Ingredients").FirstOrDefault();
-            pizza.Name = formPizza.Pizza.Name;
-            pizza.Description = formPizza.Pizza.Description;
-            pizza.Price = formPizza.Pizza.Price;
-            pizza.CategoryId = formPizza.Pizza.CategoryId;
-            pizza.Ingredients.Clear();
-            if (formPizza.AreChecked == null)
-                formPizza.AreChecked = new List<int>();
-            foreach (int ingredientId in formPizza.AreChecked)
-            {
-                Ingredient ingredient = db.Ingredients.Where(i => i.Id == ingredientId).FirstOrDefault();
-                pizza.Ingredients.Add(ingredient);
-            }
-
-            db.SaveChanges();
+            Pizza pizza = pizzaRepository.GetById(id);
+            pizzaRepository.Update(pizza, formPizza.Pizza,formPizza.AreChecked);
 
             return RedirectToAction("Detail", new { id = pizza.Id });
         }
@@ -238,13 +217,12 @@ namespace la_mia_pizzeria_static.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            Pizza pizza = db.Pizze.Where(p => p.Id == id).FirstOrDefault();
+            Pizza pizza = pizzaRepository.GetById(id);
 
             if (pizza == null)
                 return View("NotFound", "La pizza cercata non è stata trovata");
 
-            db.Pizze.Remove(pizza);
-            db.SaveChanges();
+            pizzaRepository.Delete(pizza);
 
             return RedirectToAction("Index");
         }
