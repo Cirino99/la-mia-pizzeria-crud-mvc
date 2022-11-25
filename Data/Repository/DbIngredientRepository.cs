@@ -36,7 +36,6 @@ namespace la_mia_pizzeria_static.Data.Repository
         public void Update(Ingredient ingredient, Ingredient formIngredient)
         {
             ingredient.Name = formIngredient.Name;
-            //db.Ingredients.Update(ingredient);
             db.SaveChanges();
         }
         public void Delete(Ingredient ingredient)
