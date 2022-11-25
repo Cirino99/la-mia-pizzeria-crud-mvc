@@ -8,9 +8,8 @@ namespace la_mia_pizzeria_static.Data.Repository
         PizzeriaDbContext db;
         public DbPizzaRepository()
         {
-            db = new PizzeriaDbContext();
+            db = PizzeriaDbContext.Instance;
         }
-
         public List<Pizza> All()
         {
             return db.Pizze.ToList();
@@ -19,32 +18,20 @@ namespace la_mia_pizzeria_static.Data.Repository
         {
             return db.Pizze.Where(p => p.Id == id).Include("Category").Include("Ingredients").FirstOrDefault();
         }
-        public void Create(Pizza pizza, List<int> areChecked)
+        public void Create(Pizza pizza, List<Ingredient> ingredients)
         {
-            pizza.Ingredients = new List<Ingredient>();
-            foreach (int ingredientId in areChecked)
-            {
-                Ingredient ingredient = db.Ingredients.Where(i => i.Id == ingredientId).FirstOrDefault();  //da modificare
-                pizza.Ingredients.Add(ingredient);
-            }
+            pizza.Ingredients = ingredients;
 
             db.Pizze.Add(pizza);
             db.SaveChanges();
         }
-        public void Update(Pizza pizza, Pizza formData, List<int> areChecked)
+        public void Update(Pizza pizza, Pizza formData, List<Ingredient> ingredients)
         {
             pizza.Name = formData.Name;
             pizza.Description = formData.Description;
             pizza.Price = formData.Price;
             pizza.CategoryId = formData.CategoryId;
-            pizza.Ingredients.Clear();
-            if (areChecked == null)
-                areChecked = new List<int>();
-            foreach (int ingredientId in areChecked)
-            {
-                Ingredient ingredient = db.Ingredients.Where(i => i.Id == ingredientId).FirstOrDefault();
-                pizza.Ingredients.Add(ingredient);
-            }
+            pizza.Ingredients = ingredients;
 
             db.SaveChanges();
         }

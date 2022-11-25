@@ -10,12 +10,14 @@ namespace la_mia_pizzeria_static.Controllers
 {
     public class PizzaController : Controller
     {
-        PizzeriaDbContext db;
         DbPizzaRepository pizzaRepository;
+        DbCategoryRepository categoryRepository;
+        DbIngredientRepository ingredientRepository;
         public PizzaController() : base()
         {
-            db = new PizzeriaDbContext();
             pizzaRepository = new DbPizzaRepository();
+            categoryRepository = new DbCategoryRepository();
+            ingredientRepository = new DbIngredientRepository();
         }
         public IActionResult Index()
         {
@@ -31,7 +33,7 @@ namespace la_mia_pizzeria_static.Controllers
             return View(pizza);
         }
 
-        // versione select multiple ingredients
+        // versione select multiple ingredients seza uso del repository
         //public IActionResult Create()
         //{
         //    FormPizza formPizza = new FormPizza();
@@ -50,13 +52,13 @@ namespace la_mia_pizzeria_static.Controllers
         {
             FormPizza formPizza = new FormPizza();
             formPizza.Pizza = new Pizza();
-            formPizza.Categories = db.Categories.ToList();
+            formPizza.Categories = categoryRepository.All();
             formPizza.AreChecked = new List<int>();
-            formPizza.Ingredients = db.Ingredients.ToList();
+            formPizza.Ingredients = ingredientRepository.All();
             return View(formPizza);
         }
 
-        // versione select multiple ingredients
+        // versione select multiple ingredients seza uso del repository
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult Create(FormPizza formPizza)
@@ -103,17 +105,18 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Pizza.Price"].Errors.Clear();
                     ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
-                formPizza.Categories = db.Categories.ToList();
-                formPizza.Ingredients = db.Ingredients.ToList();
+                formPizza.Categories = categoryRepository.All();
+                formPizza.Ingredients = ingredientRepository.All();
                 return View(formPizza);
             }
 
-            pizzaRepository.Create(formPizza.Pizza, formPizza.AreChecked);
+            List<Ingredient> ingredients = ingredientRepository.GetList(formPizza.AreChecked);
+            pizzaRepository.Create(formPizza.Pizza, ingredients);
 
             return RedirectToAction("Index");
         }
 
-        // versione select multiple ingredients
+        // versione select multiple ingredients seza uso del repository
         //public IActionResult Update(int id)
         //{
         //    FormPizza formPizza = new FormPizza();
@@ -136,9 +139,9 @@ namespace la_mia_pizzeria_static.Controllers
             formPizza.Pizza = pizzaRepository.GetById(id);
             if (formPizza.Pizza == null)
                 return View("NotFound", "La pizza cercata non è stata trovata");
-            formPizza.Categories = db.Categories.ToList();
+            formPizza.Categories = categoryRepository.All();
             formPizza.AreChecked = new List<int>();
-            formPizza.Ingredients = db.Ingredients.ToList();
+            formPizza.Ingredients = ingredientRepository.All();
             foreach (Ingredient ingredient in formPizza.Ingredients)
             {
                 if(formPizza.Pizza.Ingredients.Any(i => i.Id == ingredient.Id))
@@ -147,7 +150,7 @@ namespace la_mia_pizzeria_static.Controllers
             return View(formPizza);
         }
 
-        // versione select multiple ingredients
+        // versione select multiple ingredients seza uso del repository
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult Update(int id, FormPizza formPizza)
@@ -202,13 +205,14 @@ namespace la_mia_pizzeria_static.Controllers
                     ModelState["Pizza.Price"].Errors.Add("Il prezzo deve essere compreso tra 1 e 30");
                 }
                 formPizza.Pizza.Id = id;
-                formPizza.Categories = db.Categories.ToList();
-                formPizza.Ingredients = db.Ingredients.ToList();
+                formPizza.Categories = categoryRepository.All();
+                formPizza.Ingredients = ingredientRepository.All();
                 return View(formPizza);
             }
 
             Pizza pizza = pizzaRepository.GetById(id);
-            pizzaRepository.Update(pizza, formPizza.Pizza,formPizza.AreChecked);
+            List<Ingredient> ingredients = ingredientRepository.GetList(formPizza.AreChecked);
+            pizzaRepository.Update(pizza, formPizza.Pizza, ingredients);
 
             return RedirectToAction("Detail", new { id = pizza.Id });
         }
