@@ -13,7 +13,11 @@ namespace la_mia_pizzeria_static.Data
         private static PizzeriaDbContext _instance;
         public static PizzeriaDbContext Instance
         {
-            get { return _instance ?? (_instance = new PizzeriaDbContext()); }
+            get { 
+                if(_instance == null)
+                    _instance = new PizzeriaDbContext();
+                return _instance;
+            }
         }
         public DbSet<Pizza> Pizze { get; set; }
         public DbSet<Category> Categories { get; set; }

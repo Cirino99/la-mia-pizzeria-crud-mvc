@@ -25,7 +25,9 @@ namespace la_mia_pizzeria_static.Data.Repository
         }
         public void Update(Category category)
         {
-            db.Categories.Update(category);
+            //db.Categories.Update(category);
+            Category categoryOld = GetById(category.Id);
+            db.Entry(categoryOld).CurrentValues.SetValues(category);
             db.SaveChanges();
         }
         public void Delete(Category category)

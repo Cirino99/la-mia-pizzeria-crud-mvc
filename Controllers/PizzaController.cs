@@ -10,12 +10,12 @@ namespace la_mia_pizzeria_static.Controllers
 {
     public class PizzaController : Controller
     {
-        DbPizzaRepository pizzaRepository;
+        IDbPizzaRepository pizzaRepository;
         DbCategoryRepository categoryRepository;
         DbIngredientRepository ingredientRepository;
-        public PizzaController() : base()
+        public PizzaController(IDbPizzaRepository _pizzaRepository) : base()
         {
-            pizzaRepository = new DbPizzaRepository();
+            pizzaRepository = _pizzaRepository;
             categoryRepository = new DbCategoryRepository();
             ingredientRepository = new DbIngredientRepository();
         }
@@ -111,7 +111,8 @@ namespace la_mia_pizzeria_static.Controllers
             }
 
             List<Ingredient> ingredients = ingredientRepository.GetList(formPizza.AreChecked);
-            pizzaRepository.Create(formPizza.Pizza, ingredients);
+            Category category = categoryRepository.GetById(formPizza.Pizza.CategoryId);
+            pizzaRepository.Create(formPizza.Pizza, ingredients, category);
 
             return RedirectToAction("Index");
         }
@@ -212,7 +213,8 @@ namespace la_mia_pizzeria_static.Controllers
 
             Pizza pizza = pizzaRepository.GetById(id);
             List<Ingredient> ingredients = ingredientRepository.GetList(formPizza.AreChecked);
-            pizzaRepository.Update(pizza, formPizza.Pizza, ingredients);
+            Category category = categoryRepository.GetById(formPizza.Pizza.CategoryId);
+            pizzaRepository.Update(pizza, formPizza.Pizza, ingredients, category);
 
             return RedirectToAction("Detail", new { id = pizza.Id });
         }

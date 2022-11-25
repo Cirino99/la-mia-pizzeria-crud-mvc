@@ -18,19 +18,21 @@ namespace la_mia_pizzeria_static.Data.Repository
         {
             return db.Pizze.Where(p => p.Id == id).Include("Category").Include("Ingredients").FirstOrDefault();
         }
-        public void Create(Pizza pizza, List<Ingredient> ingredients)
+        public void Create(Pizza pizza, List<Ingredient> ingredients, Category category)
         {
+            pizza.Category = category;
             pizza.Ingredients = ingredients;
 
             db.Pizze.Add(pizza);
             db.SaveChanges();
         }
-        public void Update(Pizza pizza, Pizza formData, List<Ingredient> ingredients)
+        public void Update(Pizza pizza, Pizza formData, List<Ingredient> ingredients, Category category)
         {
             pizza.Name = formData.Name;
             pizza.Description = formData.Description;
             pizza.Price = formData.Price;
             pizza.CategoryId = formData.CategoryId;
+            pizza.Category = category;
             pizza.Ingredients = ingredients;
 
             db.SaveChanges();
