@@ -6,12 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();  //autoload
 
-builder.Services.AddScoped<IPizzaRepository, InMemoryPizzaRepository>();
-//builder.Services.AddScoped<IPizzaRepository, DbPizzaRepository>();
-builder.Services.AddScoped<ICategoryRepository, InMemoryCategoryRepository>();
-//builder.Services.AddScoped<ICategoryRepository, DbCategoryRepository>();
-builder.Services.AddScoped<IIngredientRepository, InMemoryIngredientRepository>();
-//builder.Services.AddScoped<IIngredientRepository, DbIngredientRepository>();
+//builder.Services.AddScoped<IPizzaRepository, InMemoryPizzaRepository>();
+builder.Services.AddScoped<IPizzaRepository, DbPizzaRepository>();
+//builder.Services.AddScoped<ICategoryRepository, InMemoryCategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, DbCategoryRepository>();
+//builder.Services.AddScoped<IIngredientRepository, InMemoryIngredientRepository>();
+builder.Services.AddScoped<IIngredientRepository, DbIngredientRepository>();
 
 var app = builder.Build();
 
